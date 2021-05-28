@@ -2,10 +2,10 @@ import { isFunction } from "lodash";
 import { IExtendableErrorOptions } from "../typing";
 
 export abstract class ExtendableError extends Error {
-  readonly debug: Record<string, any>;
-  readonly details: string;
-  readonly errorCode: string;
-  readonly publicData?: Record<string, any>;
+  public readonly debug: Record<string, any>;
+  public readonly details: string | null;
+  public readonly errorCode: string | null;
+  public readonly publicData?: Record<string, any>;
 
   protected constructor(message: string, options?: IExtendableErrorOptions) {
     super(message);
