@@ -1,11 +1,11 @@
 import { ExtendableError } from "./ExtendableError";
-import { IAPIErrorOptions } from "../typing";
+import { APIErrorOptions } from "../typing";
 
 export class APIError extends ExtendableError {
   public readonly statusCode: number;
   public readonly title: string | null;
 
-  public constructor(message: string, options?: IAPIErrorOptions) {
+  public constructor(message: string, options?: APIErrorOptions) {
     super(message, options);
 
     this.statusCode = options?.statusCode || 500;
