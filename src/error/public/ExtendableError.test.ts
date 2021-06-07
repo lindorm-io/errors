@@ -57,28 +57,57 @@ describe("ExtendableError", () => {
         }),
       );
     });
+  });
 
-    test("should set error on trace", () => {
-      const error = new Error("Error Message");
+  describe("inheritance", () => {
+    const error = new Error("error");
+    const extended = new ExtendedError("extended", {
+      error,
+      developer: {
+        debug: { debug: "debug" },
+        details: "details",
+      },
+      public: {
+        data: { data: "data" },
+        description: "description",
+        title: "title",
+      },
+    });
 
-      const extended1 = new ExtendedError("Extended Error Message", { error });
-      const extended2 = new ExtendedError("message", { error: extended1 });
-
-      expect(extended1).toStrictEqual(
+    test("should store normal error on context", () => {
+      expect(new ExtendedError("message", { error })).toStrictEqual(
         expect.objectContaining({
           errors: [error],
           developer: expect.objectContaining({
-            trace: ["Error: Error Message"],
+            trace: ["Error: error"],
           }),
         }),
       );
+    });
 
-      expect(extended2).toStrictEqual(
+    test("should store normal error on context", () => {
+      expect(new ExtendedError("message", { error: extended })).toStrictEqual(
         expect.objectContaining({
-          errors: [error, extended1],
+          errors: [error, extended],
           developer: expect.objectContaining({
-            trace: ["Error: Error Message", "ExtendedError: Extended Error Message"],
+            trace: ["Error: error", "ExtendedError: extended"],
           }),
+        }),
+      );
+    });
+
+    test("should inherit values from extendable errors", () => {
+      expect(new ExtendedError("message", { error: extended })).toStrictEqual(
+        expect.objectContaining({
+          developer: expect.objectContaining({
+            debug: { debug: "debug" },
+            details: "details",
+          }),
+          public: {
+            data: { data: "data" },
+            description: "description",
+            title: "title",
+          },
         }),
       );
     });

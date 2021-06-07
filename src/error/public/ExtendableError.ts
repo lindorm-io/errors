@@ -2,7 +2,7 @@ import { cloneDeep, isFunction } from "lodash";
 import { DeveloperInfo, ExtendableErrorOptions, PublicInfo } from "../../typing";
 
 export abstract class ExtendableError extends Error {
-  public readonly errors: Array<Error>;
+  public readonly errors: Array<ExtendableError | Error>;
   public readonly developer: DeveloperInfo & { trace: Array<string> };
   public readonly public: PublicInfo;
 
@@ -10,26 +10,39 @@ export abstract class ExtendableError extends Error {
     super(message);
 
     this.name = this.constructor.name;
-    this.errors = [];
+
+    const inherited =
+      options.error && options.error instanceof ExtendableError
+        ? {
+            errors: options.error.errors ? cloneDeep(options.error.errors) : undefined,
+            developer: {
+              debug: options.error.developer.debug,
+              details: options.error.developer.details,
+              trace: options.error.developer.trace ? cloneDeep(options.error.developer.trace) : undefined,
+            },
+            public: {
+              data: options.error.public.data,
+              description: options.error.public.description,
+              title: options.error.public.title,
+            },
+          }
+        : null;
+
+    this.errors = inherited?.errors || [];
 
     this.developer = {
-      debug: options.developer?.debug,
-      details: options.developer?.details,
-      trace: [],
+      debug: options.developer?.debug || inherited?.developer.debug,
+      details: options.developer?.details || inherited?.developer.details,
+      trace: inherited?.developer.trace || [],
     };
 
     this.public = {
-      data: options.public?.data,
-      description: options.public?.description,
-      title: options.public?.title,
+      data: options.public?.data || inherited?.public.data,
+      description: options.public?.description || inherited?.public.description,
+      title: options.public?.title || inherited?.public.title,
     };
 
     if (options.error) {
-      if (options.error instanceof ExtendableError) {
-        this.errors = cloneDeep(options.error.errors);
-        this.developer.trace = cloneDeep(options.error.developer.trace);
-      }
-
       this.errors.push(options.error);
       this.developer.trace.push(`${options.error.constructor.name}: ${options.error.message}`);
     }
