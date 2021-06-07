@@ -1,2 +1,2 @@
-export * from "./HttpClientError";
-export * from "./HttpServerError";
+export * from "./ClientErrorStatus";
+export * from "./ServerErrorStatus";
