@@ -1,2 +1,1 @@
-export * from "./error";
-export * from "./typing";
+export * from "./error/public";

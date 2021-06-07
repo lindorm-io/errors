@@ -1,5 +1,5 @@
 import { cloneDeep, isFunction } from "lodash";
-import { DeveloperInfo, ExtendableErrorOptions, PublicInfo } from "../typing";
+import { DeveloperInfo, ExtendableErrorOptions, PublicInfo } from "../../typing";
 
 export abstract class ExtendableError extends Error {
   public readonly errors: Array<Error>;

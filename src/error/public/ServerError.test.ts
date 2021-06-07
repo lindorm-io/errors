@@ -1,6 +1,6 @@
 import { ServerError } from "./ServerError";
 import { ExtendableError } from "./ExtendableError";
-import { ServiceError } from "./ServiceError";
+import { ServiceError } from "../private/ServiceError";
 
 describe("ServerError", () => {
   describe("instanceOf", () => {
@@ -28,6 +28,12 @@ describe("ServerError", () => {
 
     test("should use statusCode", () => {
       expect(new ServerError("message", { statusCode: 501 }).statusCode).toBe(501);
+    });
+  });
+
+  describe("static", () => {
+    test("should get StatusCode", () => {
+      expect(ServerError.StatusCode.NOT_IMPLEMENTED).toBe(501);
     });
   });
 });

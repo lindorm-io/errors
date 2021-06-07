@@ -1,5 +1,5 @@
 import { ServiceError } from "./ServiceError";
-import { ExtendableError } from "./ExtendableError";
+import { ExtendableError } from "../public/ExtendableError";
 
 describe("ServiceError", () => {
   describe("instanceOf", () => {

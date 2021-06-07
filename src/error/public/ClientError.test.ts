@@ -1,6 +1,6 @@
 import { ClientError } from "./ClientError";
 import { ExtendableError } from "./ExtendableError";
-import { ServiceError } from "./ServiceError";
+import { ServiceError } from "../private/ServiceError";
 
 describe("ClientError", () => {
   describe("instanceOf", () => {
@@ -28,6 +28,12 @@ describe("ClientError", () => {
 
     test("should use statusCode", () => {
       expect(new ClientError("message", { statusCode: 401 }).statusCode).toBe(401);
+    });
+  });
+
+  describe("static", () => {
+    test("should get StatusCode", () => {
+      expect(ClientError.StatusCode.BAD_REQUEST).toBe(400);
     });
   });
 });
