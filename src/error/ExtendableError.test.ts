@@ -1,41 +1,86 @@
 import { ExtendableError } from "./ExtendableError";
+import { ExtendableErrorOptions } from "../typing";
 
-describe("ExtendableError.ts", () => {
+describe("ExtendableError", () => {
   class ExtendedError extends ExtendableError {
-    constructor(options?: any) {
-      super("message", options);
+    public constructor(message: string, options?: ExtendableErrorOptions) {
+      super(message, options);
     }
   }
 
-  test("should be an Error", () => {
-    expect(new ExtendedError()).toStrictEqual(expect.any(Error));
-  });
+  describe("instanceOf", () => {
+    test("should be an Error", () => {
+      expect(new ExtendedError("message")).toStrictEqual(expect.any(Error));
+    });
 
-  test("should be an ExtendedError", () => {
-    expect(new ExtendedError().name).toBe("ExtendedError");
-  });
-
-  test("should accept debug", () => {
-    expect(new ExtendedError({ debug: { mock: true } }).debug).toStrictEqual({
-      mock: true,
+    test("should be an ExtendedError", () => {
+      expect(new ExtendedError("message").name).toBe("ExtendedError");
     });
   });
 
-  test("should accept details", () => {
-    expect(new ExtendedError({ details: "details" }).details).toBe("details");
-  });
+  describe("options", () => {
+    test("should set developer info", () => {
+      expect(
+        new ExtendedError("message", {
+          developer: {
+            debug: { value: "debug" },
+            details: "details",
+          },
+        }),
+      ).toStrictEqual(
+        expect.objectContaining({
+          developer: {
+            debug: { value: "debug" },
+            details: "details",
+            trace: [],
+          },
+        }),
+      );
+    });
 
-  test("should accept errorCode", () => {
-    expect(new ExtendedError({ errorCode: "errorCode" }).errorCode).toBe("errorCode");
-  });
+    test("should set public info", () => {
+      expect(
+        new ExtendedError("message", {
+          public: {
+            data: { value: "data" },
+            description: "description",
+            title: "title",
+          },
+        }),
+      ).toStrictEqual(
+        expect.objectContaining({
+          public: {
+            data: { value: "data" },
+            description: "description",
+            title: "title",
+          },
+        }),
+      );
+    });
 
-  test("should accept originalError", () => {
-    expect(new ExtendedError({ originalError: new Error("original") }).originalError).toStrictEqual(
-      new Error("original"),
-    );
-  });
+    test("should set error on trace", () => {
+      const error = new Error("Error Message");
 
-  test("should accept publicData", () => {
-    expect(new ExtendedError({ publicData: { num: 400 } }).publicData).toStrictEqual({ num: 400 });
+      const extended1 = new ExtendedError("Extended Error Message", { error });
+      const extended2 = new ExtendedError("message", { error: extended1 });
+
+      expect(extended1).toStrictEqual(
+        expect.objectContaining({
+          errors: [error],
+          developer: expect.objectContaining({
+            trace: ["Error: Error Message"],
+          }),
+        }),
+      );
+
+      expect(extended2).toStrictEqual(
+        expect.objectContaining({
+          errors: [error, extended1],
+          developer: expect.objectContaining({
+            trace: ["Error: Error Message", "ExtendedError: Extended Error Message"],
+          }),
+        }),
+      );
+    });
   });
 });

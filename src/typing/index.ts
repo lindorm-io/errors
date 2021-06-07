@@ -1,12 +1,16 @@
-export interface ExtendableErrorOptions {
+export interface DeveloperInfo {
   debug?: Record<string, any>;
   details?: string;
-  errorCode?: string;
-  originalError?: Error;
-  publicData?: Record<string, any>;
 }
 
-export interface APIErrorOptions extends ExtendableErrorOptions {
-  statusCode?: number;
+export interface PublicInfo {
+  data?: Record<string, any>;
+  description?: string;
   title?: string;
+}
+
+export interface ExtendableErrorOptions {
+  error?: Error;
+  developer?: DeveloperInfo;
+  public?: PublicInfo;
 }
