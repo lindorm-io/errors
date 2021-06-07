@@ -1,1 +1,1 @@
-export * from "./error/public";
+export * from "./error";

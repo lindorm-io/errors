@@ -1,6 +1,6 @@
 import { ClientError } from "./ClientError";
 import { ExtendableError } from "./ExtendableError";
-import { ServiceError } from "../private/ServiceError";
+import { HttpStatusError } from "./HttpStatusError";
 
 describe("ClientError", () => {
   describe("instanceOf", () => {
@@ -13,7 +13,7 @@ describe("ClientError", () => {
     });
 
     test("should be a ServiceError", () => {
-      expect(new ClientError("message")).toStrictEqual(expect.any(ServiceError));
+      expect(new ClientError("message")).toStrictEqual(expect.any(HttpStatusError));
     });
 
     test("should be an ClientError", () => {

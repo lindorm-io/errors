@@ -1,6 +1,6 @@
-import { ServerError } from "./ServerError";
 import { ExtendableError } from "./ExtendableError";
-import { ServiceError } from "../private/ServiceError";
+import { HttpStatusError } from "./HttpStatusError";
+import { ServerError } from "./ServerError";
 
 describe("ServerError", () => {
   describe("instanceOf", () => {
@@ -13,7 +13,7 @@ describe("ServerError", () => {
     });
 
     test("should be a ServiceError", () => {
-      expect(new ServerError("message")).toStrictEqual(expect.any(ServiceError));
+      expect(new ServerError("message")).toStrictEqual(expect.any(HttpStatusError));
     });
 
     test("should be an ServerError", () => {
