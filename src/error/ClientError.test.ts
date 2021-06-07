@@ -1,0 +1,33 @@
+import { ClientError } from "./ClientError";
+import { ExtendableError } from "./ExtendableError";
+import { ServiceError } from "./ServiceError";
+
+describe("ClientError", () => {
+  describe("instanceOf", () => {
+    test("should be an Error", () => {
+      expect(new ClientError("message")).toStrictEqual(expect.any(Error));
+    });
+
+    test("should be an ExtendableError", () => {
+      expect(new ClientError("message")).toStrictEqual(expect.any(ExtendableError));
+    });
+
+    test("should be a ServiceError", () => {
+      expect(new ClientError("message")).toStrictEqual(expect.any(ServiceError));
+    });
+
+    test("should be an ClientError", () => {
+      expect(new ClientError("message").name).toBe("ClientError");
+    });
+  });
+
+  describe("options", () => {
+    test("should automatically set statusCode", () => {
+      expect(new ClientError("message").statusCode).toBe(400);
+    });
+
+    test("should use statusCode", () => {
+      expect(new ClientError("message", { statusCode: 401 }).statusCode).toBe(401);
+    });
+  });
+});
