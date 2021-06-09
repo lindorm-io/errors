@@ -1,5 +1,5 @@
 import { HttpStatusError } from "./HttpStatusError";
-import { ExtendableErrorOptions } from "../typing";
+import { ExtendableErrorOptions } from "./ExtendableError";
 import { ClientErrorStatus } from "../enum";
 
 interface Options extends ExtendableErrorOptions {

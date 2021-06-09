@@ -1,5 +1,5 @@
 import { ExtendableError } from "./ExtendableError";
-import { ExtendableErrorOptions } from "../typing";
+import { ExtendableErrorOptions } from "./ExtendableError";
 
 describe("ExtendableError", () => {
   class ExtendedError extends ExtendableError {
@@ -19,41 +19,22 @@ describe("ExtendableError", () => {
   });
 
   describe("options", () => {
-    test("should set developer info", () => {
+    test("should set options", () => {
       expect(
         new ExtendedError("message", {
-          developer: {
-            debug: { value: "debug" },
-            details: "details",
-          },
+          code: "code",
+          data: { value: "data" },
+          debug: { value: "debug" },
+          description: "description",
+          title: "title",
         }),
       ).toStrictEqual(
         expect.objectContaining({
-          developer: {
-            debug: { value: "debug" },
-            details: "details",
-            trace: [],
-          },
-        }),
-      );
-    });
-
-    test("should set public info", () => {
-      expect(
-        new ExtendedError("message", {
-          public: {
-            data: { value: "data" },
-            description: "description",
-            title: "title",
-          },
-        }),
-      ).toStrictEqual(
-        expect.objectContaining({
-          public: {
-            data: { value: "data" },
-            description: "description",
-            title: "title",
-          },
+          code: "code",
+          data: { value: "data" },
+          debug: { value: "debug" },
+          description: "description",
+          title: "title",
         }),
       );
     });
@@ -63,35 +44,27 @@ describe("ExtendableError", () => {
     const error = new Error("error");
     const extended = new ExtendedError("extended", {
       error,
-      developer: {
-        debug: { debug: "debug" },
-        details: "details",
-      },
-      public: {
-        data: { data: "data" },
-        description: "description",
-        title: "title",
-      },
+      code: "code",
+      data: { value: "data" },
+      debug: { value: "debug" },
+      description: "description",
+      title: "title",
     });
 
     test("should store normal error on context", () => {
       expect(new ExtendedError("message", { error })).toStrictEqual(
         expect.objectContaining({
           errors: [error],
-          developer: expect.objectContaining({
-            trace: ["Error: error"],
-          }),
+          trace: ["Error: error"],
         }),
       );
     });
 
-    test("should store normal error on context", () => {
+    test("should store extended error on context", () => {
       expect(new ExtendedError("message", { error: extended })).toStrictEqual(
         expect.objectContaining({
           errors: [error, extended],
-          developer: expect.objectContaining({
-            trace: ["Error: error", "ExtendedError: extended"],
-          }),
+          trace: ["Error: error", "ExtendedError: extended"],
         }),
       );
     });
@@ -99,15 +72,11 @@ describe("ExtendableError", () => {
     test("should inherit values from extendable errors", () => {
       expect(new ExtendedError("message", { error: extended })).toStrictEqual(
         expect.objectContaining({
-          developer: expect.objectContaining({
-            debug: { debug: "debug" },
-            details: "details",
-          }),
-          public: {
-            data: { data: "data" },
-            description: "description",
-            title: "title",
-          },
+          code: "code",
+          data: { value: "data" },
+          debug: { value: "debug" },
+          description: "description",
+          title: "title",
         }),
       );
     });

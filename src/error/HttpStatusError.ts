@@ -1,5 +1,5 @@
 import { ExtendableError } from "./ExtendableError";
-import { ExtendableErrorOptions } from "../typing";
+import { ExtendableErrorOptions } from "./ExtendableError";
 
 interface Options extends ExtendableErrorOptions {
   statusCode: number;
