@@ -1,7 +1,7 @@
 import { cloneDeep, isFunction } from "lodash";
 import { v4 as uuid } from "uuid";
 
-interface IExtendableError {
+export interface IExtendableError {
   id: string;
   code: string | null;
   data: Record<string, any>;
