@@ -1,6 +1,7 @@
 import { ClientError } from "./ClientError";
 import { ExtendableError } from "./ExtendableError";
 import { HttpStatusError } from "./HttpStatusError";
+import { LindormError } from "./LindormError";
 
 describe("ClientError", () => {
   describe("instanceOf", () => {
@@ -12,7 +13,11 @@ describe("ClientError", () => {
       expect(new ClientError("message")).toStrictEqual(expect.any(ExtendableError));
     });
 
-    test("should be a ServiceError", () => {
+    test("should be a LindormError", () => {
+      expect(new ClientError("message")).toStrictEqual(expect.any(LindormError));
+    });
+
+    test("should be a HttpStatusError", () => {
       expect(new ClientError("message")).toStrictEqual(expect.any(HttpStatusError));
     });
 
