@@ -51,8 +51,10 @@ export abstract class ExtendableError extends Error implements IExtendableError 
     this.trace = inherited?.trace || [];
 
     if (options.error instanceof Error) {
+      const prefix = options.error.constructor?.name ? `${options.error.constructor?.name}: ` : "Error";
+
       this.errors.push(options.error);
-      this.trace.push(`${options.error.constructor.name}: ${options.error.message}`);
+      this.trace.push(`${prefix}${options.error.message}`);
     }
 
     if (isFunction(Error.captureStackTrace)) {
